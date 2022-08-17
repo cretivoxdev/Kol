@@ -377,7 +377,8 @@ function manipulate() {
         [
           Automotive, Beauty, Culinary, Education, Enterpreneur, Event, Family, Fashion, Financial, Games, Health,
           Kids, Lifestyle, Movie, Music, Relationship, Sport, Technology, Travel
-        ] = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+        ] = 
+        [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].attributes.gender === "Male") Male++;
         else if (objects[i].attributes.gender === "Female") Female++

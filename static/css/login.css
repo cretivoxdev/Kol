@@ -1,0 +1,26 @@
+img{
+    width: 80%;
+    height: auto;
+}
+
+.bg-main{
+    background: #2451d8;
+}
+
+form{
+    min-width: 400px;
+}
+
+.btn-login{
+    background: #2451d8;
+    color: white
+}
+
+.btn-login:hover{
+    color: white;
+    background: #2451d8;
+}
+
+input{
+    height: 45px;
+}
