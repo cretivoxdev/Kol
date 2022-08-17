@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0-1/css/all.min.css"
+    integrity="sha512-xEGx3E22YcUzfX525T3KV7SqNexb09E2CckB6lBB/dT930VlbSX9JnQlLiogtSLAl9yGAJGKDu7O1ZanrqljGg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+  <!-- <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css"> -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="index.css" rel="stylesheet">
+  <title>CRUD FROM API</title>
+</head>
+
+<body>
+  <!-- Loading -->
+  <div id="loader" class="d-flex w-100 align-items-center justify-content-center">
+    <div class="card">
+      <div class="card-body">
+        <div class="spinner-border" role="status">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Loading -->
+
+  <nav class="navbar navbar-dark bg-mynav">
+    <div class="container-fluid">
+      <div class="container">
+        <a class="navbar-brand" href="#">Kol Management System</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row my-4">
+      <div class="col-md-3 col-6 mb-md-0 mb-4">
+        <div class="card card-list green">
+          <div class="card-body align-items-center">
+            <i class="fas fa-user-friends float-icon"></i>
+            <p class="t-list t-green">TOTAL TALENT</p>
+            <h4 id="total-talent">Loading</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card card-list blue">
+          <div class="card-body">
+            <p class="t-list t-blue">TOTAL CATEGORY</p>
+            <h4 id="total-category">Loading</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card card-list cyan">
+          <div class="card-body">
+            <p class="t-list t-cyan">MALE</p>
+            <h4 id="count_male">Loading</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card card-list yellow">
+          <div class="card-body">
+            <p class="t-list t-yellow">FEMALE</p>
+            <h4 id="count_female">Loading</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-body">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <canvas id="chartTier"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex bd-highlight align-items-center">
+          <div class="me-auto p-2 bd-highlight">
+            <h5>Influencer List</h5>
+          </div>
+          <div class="p-2 bd-highlight">
+            <!-- onclick="showUserCreateBox()" -->
+            <button type="button" class="btn btn-main" data-dismiss="modal" data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop">Add New Data</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table id="tableInfluencer" class="display nowrap" style="width:100%">
+          <thead>
+            <tr>
+              <th>Avatar</th>
+              <th>Username</th>
+              <th>Followers</th>
+              <th>Verified</th>
+              <th>Tier</th>
+              <th>Gender</th>
+              <th>Category</th>
+              <!-- <th>Ratecard</th> -->
+              <th>Update At</th>
+              <th>Action</th>
+              <!-- <th>Action</th> -->
+              <!-- <th>Action</th> -->
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Avatar</th>
+              <th>Username</th>
+              <th>Followers</th>
+              <th>Verified</th>
+              <th>Tier</th>
+              <th>Gender</th>
+              <th>Category</th>
+              <!-- <th>Ratecard</th> -->
+              <th>Update At</th>
+              <th>Action</th>
+              <!-- <th>Action</th> -->
+              <!-- <th>Action</th> -->
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Create New -->
+  <div class="modal modal-new fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">New Record</h5>
+        </div>
+        <div class="modal-body p-4">
+          <form>
+            <div class="alert alert-warning" id="alert-warning" role="alert">
+             <small>Please Fill All Data to Continue.</small>
+            </div>
+            <div class="row">
+              <input type="hidden" class="form-control" id="id">
+              <input type="hidden" value="https://via.placeholder.com/150x150" class="form-control" id="profilepict">
+              <div class="mb-2 col-4">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" required class="form-control" id="username">
+              </div>
+              <div class="mb-2 col-4">
+                <label for="followers" class="form-label" >Followers</label>
+                <input type="number" required class="form-control" id="followers" onchange="converTier(this.value)">
+              </div>
+              <div class="mb-2 col-4">
+                <label for="tier" class="form-label">Tier</label>
+                <input type="text" required disabled class="form-control" id="tier">
+              </div>
+              <!-- <div class="mb-2 col-4">
+                <label for="verified" class="form-label">Verified</label>
+                <input type="number" class="form-control" id="verified">
+              </div> -->
+              <div class="mb-2 col-4">
+                <label for="contact" class="form-label">Contact</label>
+                <input type="text" required class="form-control" id="contact">
+              </div>
+              <input type="hidden" value="0" class="form-control" id="verified">
+              <div class="mb-2 col-4">
+                <label for="er" class="form-label">Er</label>
+                <input type="number" required class="form-control" id="er">
+              </div>
+              <div class="mb-2 col-4">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" aria-label="Default select example" id="gender" required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="mb-2 col-4">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" aria-label="Default select example" id="category" required>
+                  <option selected>Select One</option>
+                  <option value="Automotive">Automotive</option>
+                  <option value="Beauty">Beauty</option>
+                  <option value="Culinary">Culinary</option>
+                  <option value="Education">Education</option>
+                  <option value="Enterpreneur">Enterpreneur</option>
+                  <option value="Event">Event</option>
+                  <option value="Family">Family</option>
+                  <option value="Fashion">Fashion</option>
+                  <option value="Financial Planning">Financial Planning</option>
+                  <option value="Games">Games</option>
+                  <option value="Health">Health</option>
+                  <option value="Kids">Kids</option>
+                  <option value="Lifestyle">Lifestyle</option>
+                  <option value="Movie">Movie</option>
+                  <option value="Music">Music</option>
+                  <option value="Relationship">Relationship</option>
+                  <option value="Sport">Sport</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Travel">Travel</option>
+                </select>
+              </div>
+              <div class="mb-2 col-4">
+                <label for="ratecard" class="form-label">Ratecard</label>
+                <input type="text" required class="form-control" id="ratecard">
+              </div>
+              <div class="mb-2 col-4">
+                <small>Its Verified?</small>
+                <div class="switch-field">
+                  <input type="radio" id="radio-one" name="radios" value="1"/>
+                  <label for="radio-one">Yes</label>
+                  <input type="radio" id="radio-two" name="radios" value="0"/>
+                  <label for="radio-two">No</label>
+                </div>
+                <input type="hidden" id="verified">
+                <!-- <div class="form-check form-check">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">
+                  <label class="form-check-label" for="inlineRadio1">Unverified</label>
+                </div>
+                <div class="form-check form-check">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
+                  <label class="form-check-label" for="inlineRadio2">Verified</label>
+                </div> -->
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" onclick="userCreate()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit-->
+  <div class="modal fade" id="viewModals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">View & Edit</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div> -->
+        <div class="modal-body">
+          <div class="instagram">
+            <div class="profile text-center">
+              <div class="delete-btn">
+                <button class="btn btn-delete" onClick="viewDelete()" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Permanent Delete Data"><i class="fas fa-trash"></i></button>
+              </div>
+              <img id="v_profile" src="" alt="">
+              <h5 class="py-2"><a href="" id="e_display" target="__blank"></a></h5>
+              <div class="">
+                <small>Contact: <span id="show_contact"></span></small>,
+                <small>Ratecard: <a href="" id="show_ratecard">Link</a></small>
+              </div>
+              <p><span class="badge bg-info" id="e_category"></span></p>
+            </div>
+            <form>
+              <div class="row">
+                <div class="mb-3 col-6">
+                  <label for="e_username" class="form-label">Username</label>
+                  <input type="text" disabled class="form-control" id="e_username" value="" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="e_verified" class="form-label">Verified</label>
+                  <input type="boolean" class="form-control" id="e_verified" value="" aria-describedby="emailHelp">
+                </div>
+              </div>
+              <div class="row">
+                <input type="hidden" id="e_id">
+                <input type="hidden" id="e_profilePict">
+                <div class="mb-3 col-6">
+                  <label for="e_tier" class="form-label">Tier</label>
+                  <input type="text" disabled class="form-control" id="e_tier">
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="e_followers" class="form-label">Followers</label>
+                  <input type="text" class="form-control" id="e_followers">
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="e_category" class="form-label">Category</label>
+                  <select class="form-select" aria-label="Default select example" id="e_category">
+                    <option value="Automotive">Automotive</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Culinary">Culinary</option>
+                    <option value="Education">Education</option>
+                    <option value="Enterpreneur">Enterpreneur</option>
+                    <option value="Event">Event</option>
+                    <option value="Family">Family</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Financial Planning">Financial Planning</option>
+                    <option value="Games">Games</option>
+                    <option value="Health">Health</option>
+                    <option value="Kids">Kids</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Movie">Movie</option>
+                    <option value="Music">Music</option>
+                    <option value="Relationship">Relationship</option>
+                    <option value="Sport">Sport</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Travel">Travel</option>
+                  </select>
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="e_er" class="form-label">Er</label>
+                  <input type="text" class="form-control" id="e_er">
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="e_contact" class="form-label">Contact</label>
+                  <input type="text" class="form-control" id="e_contact">
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="e_rateCard" class="form-label">Ratecard</label>
+                  <input type="text" class="form-control" id="e_rateCard">
+                </div>
+              </div>
+              <small class="text-secondary">Created at: <span id="d_create"></span></small>, <small class="text-secondary">Updated at: <span id="d_update"></span></small>
+            </form>
+          </div>
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary" onClick="editData()" type="button">Save changes</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+
+  <!-- Modals Delete -->
+  <div class="modal fade" id="deleteModals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body delete p-5">
+          <div class="text-delete my-4 text-center">
+            <h5>Are you sure to delete <span id="confirm_delete" class="bg-danger"></span>? You can't undo this action.</h5>
+          </div>
+          <div class="d-grid gap-2">
+            <button class="btn btn-danger" onClick="userDelete()" type="button">Delete</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+          </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modals Delete -->
+  <script src="index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
