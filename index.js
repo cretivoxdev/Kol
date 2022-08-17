@@ -1,5 +1,14 @@
+const loader = document.querySelector("#loader")
+function displayLoading(){
+  loader.classList.add("display");
+}
+function hideLoading(){
+  loader.classList.remove("display")
+}
+
 function loadTable() {
-  fetch("http://localhost:1337/api/kols")
+  displayLoading()
+  fetch("https://cbn360-talent.herokuapp.com/api/kols")
     .then((response) => {
       return response.json();
     })
@@ -118,7 +127,7 @@ function loadTable() {
           ],
           paging: false,
         });
-
+        hideLoading()
       });
     });
 }
@@ -151,7 +160,7 @@ function userCreate() {
   const tier = document.getElementById("tier").value;
   const gender = document.getElementById("gender").value;
   const xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "http://localhost:1337/api/kols/");
+  xhttp.open("POST", "https://cbn360-talent.herokuapp.com/api/kols/");
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhttp.send(JSON.stringify(
     {
@@ -178,7 +187,7 @@ function userCreate() {
 // function showUserEditBox(id) {
 //   // console.log(id)
 //   const xhttp = new XMLHttpRequest();
-//   xhttp.open("GET", "http://localhost:1337/api/kols/"+id);
+//   xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/"+id);
 //   xhttp.send();
 //   xhttp.onreadystatechange = function() {
 //     if (this.readyState == 4 && this.status == 200) {
@@ -217,7 +226,7 @@ function userCreate() {
 //   const rc = document.getElementById("ratecard_e").value;
 //   const xhttp = new XMLHttpRequest();
 //   console.log(uname)
-//   xhttp.open("PUT", "http://localhost:1337/api/kols/"+id);
+//   xhttp.open("PUT", "https://cbn360-talent.herokuapp.com/api/kols/"+id);
 //   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 //   xhttp.send(JSON.stringify(
 //       {
@@ -241,7 +250,7 @@ function userCreate() {
 function viewDelete(id) {
   console.log(id)
   const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:1337/api/kols/" + id);
+  xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -257,7 +266,7 @@ function userDelete(id) {
   const xhttp = new XMLHttpRequest();
   var result = confirm("Are you sure to delete?");
       if(result){
-        xhttp.open("DELETE", "http://localhost:1337/api/kols/" + id);
+        xhttp.open("DELETE", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify(
           {
@@ -284,7 +293,7 @@ function onView(id) {
   // console.log(id)
   // console.log(catColor)
   const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:1337/api/kols/" + id);
+  xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -331,7 +340,7 @@ function editData() {
   const verified = document.getElementById("e_verified").value
   const profilePict = document.getElementById("e_profilePict").value
   const xhttp = new XMLHttpRequest();
-  xhttp.open("PUT", "http://localhost:1337/api/kols/" + id);
+  xhttp.open("PUT", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhttp.send(JSON.stringify(
     {
@@ -356,7 +365,7 @@ function editData() {
 // Overview
 function manipulate() {
   const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:1337/api/kols/");
+  xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/");
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {

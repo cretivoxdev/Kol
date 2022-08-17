@@ -10,6 +10,7 @@ body{
 
 .bg-mynav {
     background-color: #4d72de;
+    height: 65px;
   }
   
   body {
@@ -114,8 +115,22 @@ th{
   background: rgba(0, 0, 0, 0.13);
   height: 100vh;
   position: absolute;
-  z-index: 99999;
-  display: none !important;
+  z-index: 999990;
+  visibility: hidden;
+}
+
+#loader.display{
+  visibility: visible;
+}
+
+#loaderModals{
+  position: absolute;
+  background: black;
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+  z-index: 9999;
+  visibility: hidden;
 }
 
 #confirm_delete{
@@ -186,13 +201,13 @@ p.t-list{
   left: 85%;
   bottom: 50%;
   transform: translate(-50%, 50%);
-  scale: 1.3;
+  scale: 1.5;
   color: #aaa;
 }
 
 
 #myChart{
-  max-height: 300px;
+  max-height: 350px;
 }
 
 .instagram .profile{

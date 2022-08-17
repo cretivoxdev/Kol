@@ -35,9 +35,10 @@
   <!-- Loading -->
   <div id="loader" class="d-flex w-100 align-items-center justify-content-center">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body text-center">
         <div class="spinner-border" role="status">
         </div>
+        <p>Loading all data..</p>
       </div>
     </div>
   </div>
@@ -65,6 +66,7 @@
       <div class="col-md-3 col-6">
         <div class="card card-list blue">
           <div class="card-body">
+            <i class="fas fa-grip-horizontal float-icon"></i>
             <p class="t-list t-blue">TOTAL CATEGORY</p>
             <h4 id="total-category">Loading</h4>
           </div>
@@ -73,6 +75,7 @@
       <div class="col-md-3 col-6">
         <div class="card card-list cyan">
           <div class="card-body">
+            <i class="fas fa-mars float-icon"></i>
             <p class="t-list t-cyan">MALE</p>
             <h4 id="count_male">Loading</h4>
           </div>
@@ -81,6 +84,7 @@
       <div class="col-md-3 col-6">
         <div class="card card-list yellow">
           <div class="card-body">
+            <i class="fas fa-venus float-icon"></i>
             <p class="t-list t-yellow">FEMALE</p>
             <h4 id="count_female">Loading</h4>
           </div>
@@ -88,14 +92,14 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-md-9">
-        <div class="card">
-          <div class="card-body">
+      <div class="col-md-8">
+        <div class="card h-100">
+          <div class="card-body align-items-center d-flex">
             <canvas id="myChart"></canvas>
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="card h-100">
           <div class="card-body">
             <canvas id="chartTier"></canvas>
@@ -271,6 +275,15 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div> -->
         <div class="modal-body">
+          <div class="" id="loaderModals">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="spinner-border" role="status">
+                </div>
+                <p>Loading all data..</p>
+              </div>
+            </div>
+          </div>
           <div class="instagram">
             <div class="profile text-center">
               <div class="delete-btn">
@@ -343,7 +356,7 @@
                   <input type="text" class="form-control" id="e_rateCard">
                 </div>
               </div>
-              <small class="text-secondary">Created at: <span id="d_create"></span></small>, <small class="text-secondary">Updated at: <span id="d_update"></span></small>
+              <small class="text-secondary">Created at: <span class="text-dark" id="d_create"></span></small><br><small class="text-secondary">Updated at: <span id="d_update" class="text-dark"></span></small>
             </form>
           </div>
           <div class="d-grid gap-2">
