@@ -1,19 +1,29 @@
 const loader = document.querySelector("#loader")
-function displayLoading(){
+function displayLoading() {
   loader.classList.add("display");
 }
-function hideLoading(){
+function hideLoading() {
   loader.classList.remove("display")
+}
+
+const dmodals = document.getElementById("hsmodals")
+function displayModals(){
+  dmodals.classList.remove("display-modals")
+}
+function hideModals(){
+  dmodals.classList.add("display-modals")
 }
 
 function loadTable() {
   displayLoading()
-  fetch("https://cbn360-talent.herokuapp.com/api/kols")
+  fetch("http://localhost:1337/api/kols")
     .then((response) => {
       return response.json();
     })
     .then((jsondata) => {
       let dataInfluencer = jsondata.data;
+      // console.log(dataInfluencer.length)
+      console.log(dataInfluencer.length)
       let sort = dataInfluencer.reverse()
       // console.log(dataInfluencer)
       // for (let dateSort of dataInfluencer) {
@@ -24,6 +34,10 @@ function loadTable() {
       // console.log(sort[0].id)
       $(document).ready(function () {
         $("#tableInfluencer").DataTable({
+        //   lengthMenu: [
+        //     [10, 25, 50, -1],
+        //     [10, 25, 50, 'All'],
+        // ],
           data: sort,
           scrolly: true,
           responsive: true,
@@ -36,7 +50,7 @@ function loadTable() {
             },
             {
               data: "attributes.username", render: function (data) {
-                return '<a href="https://instagram.com/' + data + '">' + data + '</a>'
+                return '<a target="__blank" href="https://instagram.com/' + data + '">' + data + '</a>'
               }
             },
             {
@@ -53,7 +67,7 @@ function loadTable() {
               }
             },
             {
-              data: "attributes.tier"
+              data: "attributes.tier",
             },
             {
               data: "attributes.gender",
@@ -69,7 +83,7 @@ function loadTable() {
                   catColor = "culinary"
                 } else if (data === "Education") {
                   catColor = "education"
-                } else if (data === "Enterpreneur") {
+                } else if (data === "Entrepreneur") {
                   catColor = "enterpreneur"
                 } else if (data === "Event") {
                   catColor = "event"
@@ -84,7 +98,7 @@ function loadTable() {
                 } else if (data === "Health") {
                   catColor = "health"
                 } else if (data === "Kids") {
-                  catColor = "sids"
+                  catColor = "kids"
                 } else if (data === "Lifestyle") {
                   catColor = "lifestyle"
                 } else if (data === "Movie") {
@@ -99,6 +113,8 @@ function loadTable() {
                   catColor = "technology"
                 } else if (data === "Travel") {
                   catColor = "travel"
+                }else if (data === "Culture") {
+                  catColor = "culture"
                 }
                 return '<p class="badge" id="' + catColor + '">' + data + '</p>'
               }
@@ -114,8 +130,8 @@ function loadTable() {
             {
               data: "id", render: function (data, type) {
                 return type === 'display' ?
-                  '<a class="btn btn-outline-secondary mx-1" type="button" onClick="userDelete(' + data + ')">delete</a>' +
-                  '<a class="btn btn-outline-secondary mx-1" type="button" data-bs-toggle="modal" data-bs-target="#viewModals" onClick="onView(' + data + ')"">View</a>' : data
+                '<a class="btn btn-outline-success mx-1" type="button" data-bs-toggle="modal" data-bs-target="#viewModals" onClick="onView(' + data + ')""><i class="fas fa-eye"></i></a>' +
+                '<a class="btn btn-outline-danger mx-1" type="button" onClick="userDelete(' + data + ')"><i class="fas fa-trash"></i></a>': data
               }
             },
             // {
@@ -125,7 +141,7 @@ function loadTable() {
             //   }
             // },
           ],
-          paging: false,
+          paging: true,
         });
         hideLoading()
       });
@@ -160,7 +176,7 @@ function userCreate() {
   const tier = document.getElementById("tier").value;
   const gender = document.getElementById("gender").value;
   const xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "https://cbn360-talent.herokuapp.com/api/kols/");
+  xhttp.open("POST", "http://localhost:1337/api/kols/");
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhttp.send(JSON.stringify(
     {
@@ -176,97 +192,46 @@ function userCreate() {
       const objects = JSON.parse(this.responseText);
       // loadTable();
       $('#staticBackdrop').modal('hide')
+      // alert(objects.data.attributes.username)
+      // Swal.fire("test")
       location.reload()
-      Swal.fire(objects.data.attributes.username + "<br>" + " Success Created");
+      // Swal.fire(objects.data.attributes.username + "<br>" + " Success Created");
     } else {
       document.getElementById("alert-warning").style.display = "block"
     }
   };
 }
 
-// function showUserEditBox(id) {
-//   // console.log(id)
+// // Before Delete
+// function viewDelete(id) {
+//   console.log(id)
 //   const xhttp = new XMLHttpRequest();
-//   xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/"+id);
+//   xhttp.open("GET", "http://localhost:1337/api/kols/" + id);
 //   xhttp.send();
-//   xhttp.onreadystatechange = function() {
+//   xhttp.onreadystatechange = function () {
 //     if (this.readyState == 4 && this.status == 200) {
-//       const objects = JSON.parse(this.responseText);
-//       const user = objects.data;
-//       // console.log(user[0].id);
-//       Swal.fire({
-//         title: 'Edit ' + id ,
-//         html:
-//           '<input id="id_e" type="hidden" value='+user['id']+'>' +
-//           '<input id="username_e" class="swal2-input" placeholder="Username" value="'+user.attributes['username']+'">' +
-//           '<input id="category_e" class="swal2-input" placeholder="Category" value="'+user.attributes['category']+'">' +
-//           '<input id="followers_e" class="swal2-input" placeholder="Followers" value="'+user.attributes['followers']+'">' +
-//           '<input id="er_e" class="swal2-input" placeholder="Engagement Rate" value="'+user.attributes['er']+'">' +
-//           '<input id="contact_e" class="swal2-input" placeholder="Contact Person" value="'+user.attributes['cp']+'">' +
-//           '<input id="ratecard_e" class="swal2-input" placeholder="Ratecard" value="'+user.attributes['rc']+'">',
-//           // '<input id="lname" class="swal2-input" placeholder="Last" value="'+user['lname']+'">' +
-//           // '<input id="username" class="swal2-input" placeholder="Username" value="'+user['username']+'">' +
-//           // '<input id="email" class="swal2-input" placeholder="Email" value="'+user['email']+'">',
-//         focusConfirm: false,
-//         preConfirm: () => {
-//           userEdit();
-//         }
-//       })
+//       const objects = JSON.parse(this.responseText)
+//       console.log(objects)
 //     }
-//   };
+//   }
 // }
-
-// function userEdit() {
-//   const id = document.getElementById("id_e").value;
-//   const uname = document.getElementById("username_e").value;
-//   const cat = document.getElementById("category_e").value;
-//   const foll = document.getElementById("followers_e").value;
-//   const engagement = document.getElementById("er_e").value;
-//   const cp = document.getElementById("contact_e").value;
-//   const rc = document.getElementById("ratecard_e").value;
-//   const xhttp = new XMLHttpRequest();
-//   console.log(uname)
-//   xhttp.open("PUT", "https://cbn360-talent.herokuapp.com/api/kols/"+id);
-//   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-//   xhttp.send(JSON.stringify(
-//       {
-//           "data":
-//             { 
-//               "id": id, "username": uname, "category": cat, "followers": foll, "er": engagement, "cp": cp, "rc": rc,
-//             }
-//       }
-//   ));
-//   console.log(JSON.stringify) 
-//   xhttp.onreadystatechange = function() {
-//     if (this.readyState == 4 && this.status == 200) {
-//       const objects = JSON.parse(this.responseText);
-//       location.reload()
-//       console.log("Success")
-//     }
-//   };
-// }
-
-// Before Delete
-function viewDelete(id) {
-  console.log(id)
-  const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
-  xhttp.send();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      const objects = JSON.parse(this.responseText)
-      console.log(objects)
-    }
-  }
-}
 
 // On Delete
 function userDelete(id) {
-  console.log(id)
-  const xhttp = new XMLHttpRequest();
-  var result = confirm("Are you sure to delete?");
-      if(result){
-        xhttp.open("DELETE", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
+  Swal.fire({
+    title: 'Do you want to delete this data?',
+    showConfirmButton: false,
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Save',
+    denyButtonText: `Delete`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isDenied) {
+      const xhttp = new XMLHttpRequest();
+      // var result = confirm("Are you sure to delete?");
+      if (result) {
+        xhttp.open("DELETE", "http://localhost:1337/api/kols/" + id);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify(
           {
@@ -277,28 +242,33 @@ function userDelete(id) {
           }
         ));
         xhttp.onreadystatechange = function () {
-          if (this.readyState == 4 && this.status === 200) {
-            const objects = JSON.parse(this.responseText);
-            Swal.fire("deleted");
-            location.reload();
+          if (this.status === 200) {
+            // const objects = JSON.parse(this.responseText);
+            // Swal.fire("deleted");
+            location.reload()
+            // location.reload();
+            console.log(this.status)
           }
         };
       }
- 
+    }
+  })
 }
 
 // Before Edit
 function onView(id) {
+  hideModals()
   // console.log(id)
   // console.log(id)
   // console.log(catColor)
   const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
+  xhttp.open("GET", "http://localhost:1337/api/kols/" + id);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText);
       let user = objects.data;
+      displayModals()
       // console.log(user);
       document.getElementById("v_profile").src = user.attributes.profilePict
       document.getElementById("e_display").innerHTML = user.attributes.username
@@ -340,7 +310,7 @@ function editData() {
   const verified = document.getElementById("e_verified").value
   const profilePict = document.getElementById("e_profilePict").value
   const xhttp = new XMLHttpRequest();
-  xhttp.open("PUT", "https://cbn360-talent.herokuapp.com/api/kols/" + id);
+  xhttp.open("PUT", "http://localhost:1337/api/kols/" + id);
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhttp.send(JSON.stringify(
     {
@@ -365,7 +335,7 @@ function editData() {
 // Overview
 function manipulate() {
   const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "https://cbn360-talent.herokuapp.com/api/kols/");
+  xhttp.open("GET", "http://localhost:1337/api/kols/");
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -377,8 +347,8 @@ function manipulate() {
         [
           Automotive, Beauty, Culinary, Education, Enterpreneur, Event, Family, Fashion, Financial, Games, Health,
           Kids, Lifestyle, Movie, Music, Relationship, Sport, Technology, Travel
-        ] = 
-        [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+        ] =
+          [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].attributes.gender === "Male") Male++;
         else if (objects[i].attributes.gender === "Female") Female++
@@ -402,42 +372,42 @@ function manipulate() {
         else if (objects[i].attributes.category === "Technology") Technology++;
         else if (objects[i].attributes.category === "Travel") Travel++;
       }
-      const chartJson = 
-      [
-        {"name":"Automovite", "value": Automotive},
-        {"name": "Beauty", "value": Beauty},
-        {"name": "Culinary", "value": Culinary},
-        {"name": "Education", "value": Education},
-        {"name": "Enterpreneur", "value": Enterpreneur},
-        {"name": "Event", "value": Event},
-        {"name": "Family", "value": Family},
-        {"name": "Fashion", "value": Fashion},
-        {"name": "Financial Planning", "value": Financial},
-        {"name": "Games", "value": Games},
-        {"name": "Health", "value": Beauty},
-        {"name": "Kids", "value": Kids},
-        {"name": "Lifestyle", "value": Lifestyle},
-        {"name": "Movie", "value": Movie},
-        {"name": "Music", "value": Music},
-        {"name": "Relationship", "value": Relationship},
-        {"name": "Sport", "value": Sport},
-        {"name": "Technology", "value": Technology},
-        {"name": "Travel", "value": Travel},
-      ]
+      const chartJson =
+        [
+          { "name": "Automovite", "value": Automotive },
+          { "name": "Beauty", "value": Beauty },
+          { "name": "Culinary", "value": Culinary },
+          { "name": "Education", "value": Education },
+          { "name": "Enterpreneur", "value": Enterpreneur },
+          { "name": "Event", "value": Event },
+          { "name": "Family", "value": Family },
+          { "name": "Fashion", "value": Fashion },
+          { "name": "Financial Planning", "value": Financial },
+          { "name": "Games", "value": Games },
+          { "name": "Health", "value": Beauty },
+          { "name": "Kids", "value": Kids },
+          { "name": "Lifestyle", "value": Lifestyle },
+          { "name": "Movie", "value": Movie },
+          { "name": "Music", "value": Music },
+          { "name": "Relationship", "value": Relationship },
+          { "name": "Sport", "value": Sport },
+          { "name": "Technology", "value": Technology },
+          { "name": "Travel", "value": Travel },
+        ]
       // console.log(chartJson)
       // Chart Category
       const chartCategory = new Chart(document.getElementById("myChart"), configCategory)
       $(document).ready(function () {
-          const cName = chartJson.map(function(index){
-            return index.name
-          })
-          const cValue = chartJson.map(function(index){
-            return index.value
-          })
-          chartCategory.config.data.labels = cName;
-          chartCategory.config.data.datasets[0].data = cValue
-          chartCategory.update()
+        const cName = chartJson.map(function (index) {
+          return index.name
         })
+        const cValue = chartJson.map(function (index) {
+          return index.value
+        })
+        chartCategory.config.data.labels = cName;
+        chartCategory.config.data.datasets[0].data = cValue
+        chartCategory.update()
+      })
 
       document.getElementById("count_male").innerHTML = Male,
         document.getElementById("count_female").innerHTML = Female
@@ -613,3 +583,23 @@ $(function () {
 });
 
 
+// Multiple Post
+function newF(){
+
+// for (let i = 0; i < test.length; i++) {
+//   const xhttp = new XMLHttpRequest();
+// xhttp.open("POST", "http://localhost:1337/api/kols/");
+// xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+// xhttp.send(JSON.stringify(
+//   {
+//     "data":
+//     test[i]
+//   }
+// ));
+// console.log("success")
+// }
+console.log(test.length)
+}
+
+
+// newF()

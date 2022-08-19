@@ -109,6 +109,7 @@ th{
 
 #v_profile{
   border-radius: 100%;
+  width: 120px;
 }
 
 #loader{
@@ -281,6 +282,9 @@ small{
   background: rgb(253, 108, 211);
 }
 
+#culture{
+  background: rgb(188, 108, 253);
+}
 .switch-field {
 	display: flex;
 	margin-bottom: 36px;
@@ -343,4 +347,12 @@ small{
 
 .btn-delete:hover{
   color: white;
+}
+
+.btn-danger:active{
+  background: red;
+}
+
+.display-modals{
+  visibility: hidden;
 }
