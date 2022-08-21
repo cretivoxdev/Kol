@@ -92,16 +92,16 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-md-9">
+      <div class="col-md-8">
         <div class="card h-100">
           <div class="card-body align-items-center d-flex">
             <canvas id="myChart"></canvas>
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="card h-100">
-          <div class="card-body p-3 align-items-center d-flex">
+          <div class="card-body p-4 align-items-center d-flex">
             <canvas id="chartTier"></canvas>
           </div>
         </div>
@@ -295,7 +295,7 @@
                 <small>Contact: <span id="show_contact"></span></small>,
                 <small>Ratecard: <a href="" id="show_ratecard" target="__blank">Link</a></small>
               </div>
-              <p><span class="badge bg-info" id="e_category"></span></p>
+              <p><span class="badge" id="e_category"></span></p>
             </div>
             <form>
               <div class="row">
@@ -317,7 +317,7 @@
                 </div>
                 <div class="mb-3 col-6">
                   <label for="e_followers" class="form-label">Followers</label>
-                  <input type="text" class="form-control" id="e_followers">
+                  <input type="text" class="form-control" id="e_followers" onchange="converTierEdit(this.value)">
                 </div>
                 <div class="mb-3 col-6">
                   <label for="e_category" class="form-label">Category</label>

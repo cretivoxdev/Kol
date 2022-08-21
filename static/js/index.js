@@ -23,7 +23,7 @@ function loadTable() {
     .then((jsondata) => {
       let dataInfluencer = jsondata.data;
       // console.log(dataInfluencer.length)
-      console.log(dataInfluencer.length)
+      // console.log(dataInfluencer.length)
       let sort = dataInfluencer.reverse()
       // console.log(dataInfluencer)
       // for (let dateSort of dataInfluencer) {
@@ -141,7 +141,7 @@ function loadTable() {
             //   }
             // },
           ],
-          paging: true,
+          paging: false,
         });
         hideLoading()
       });
@@ -202,20 +202,6 @@ function userCreate() {
   };
 }
 
-// // Before Delete
-// function viewDelete(id) {
-//   console.log(id)
-//   const xhttp = new XMLHttpRequest();
-//   xhttp.open("GET", "http://localhost:1337/api/kols/" + id);
-//   xhttp.send();
-//   xhttp.onreadystatechange = function () {
-//     if (this.readyState == 4 && this.status == 200) {
-//       const objects = JSON.parse(this.responseText)
-//       console.log(objects)
-//     }
-//   }
-// }
-
 // On Delete
 function userDelete(id) {
   Swal.fire({
@@ -270,25 +256,87 @@ function onView(id) {
       let user = objects.data;
       displayModals()
       // console.log(user);
+
+      let f = document.getElementById("e_followers").defaultValue = user.attributes.followers
+        let ctier;
+        if (f > 1000000) {
+          ctier = "Mega"
+        } else if (f > 500000 && f <= 1000000) {
+          ctier = "Macro"
+        } else if (f > 50000 && f <= 500000) {
+          ctier = "Mid-Tier"
+        } else if (f > 10000 && f <= 50000) {
+          ctier = "Micro"
+        } else {
+          ctier = "Nano"
+        }
+        // let data = document.getElementById("e_category").innerHTML = user.attributes.category
+        // console.log(data)
+        // // console.log(ctier)
+        // let catColor;
+        // if (data === "Automotive") {
+        //   catColor = "automotive"
+        // } else if (data === "Beauty") {
+        //   catColor = "beauty"
+        // } else if (data === "Culinary") {
+        //   catColor = "culinary"
+        // } else if (data === "Education") {
+        //   catColor = "education"
+        // } else if (data === "Entrepreneur") {
+        //   catColor = "enterpreneur"
+        // } else if (data === "Event") {
+        //   catColor = "event"
+        // } else if (data === "Family") {
+        //   catColor = "family"
+        // } else if (data === "Fashion") {
+        //   catColor = "fashion"
+        // } else if (data === "Financial Planning") {
+        //   catColor = "finance"
+        // } else if (data === "Games") {
+        //   catColor = "games"
+        // } else if (data === "Health") {
+        //   catColor = "health"
+        // } else if (data === "Kids") {
+        //   catColor = "kids"
+        // } else if (data === "Lifestyle") {
+        //   catColor = "lifestyle"
+        // } else if (data === "Movie") {
+        //   catColor = "movie"
+        // } else if (data === "Music") {
+        //   catColor = "music"
+        // } else if (data === "Relationship") {
+        //   catColor = "relationship"
+        // } else if (data === "Sport") {
+        //   catColor = "sport"
+        // } else if (data === "Technology") {
+        //   catColor = "technology"
+        // } else if (data === "Travel") {
+        //   catColor = "travel"
+        // }else if (data === "Culture") {
+        //   catColor = "culture"
+        // }
+
       document.getElementById("v_profile").src = user.attributes.profilePict
       document.getElementById("e_display").innerHTML = user.attributes.username
       document.getElementById("e_display").href = "https://instagram.com/" + user.attributes.username
       document.getElementById("show_ratecard").href = user.attributes.rc
       document.getElementById("show_contact").innerHTML = user.attributes.cp
+      var test1 = document.getElementById("e_category").innerHTML = user.attributes.category
       document.getElementById("e_category").innerHTML = user.attributes.category
       document.getElementById("d_create").innerHTML = user.attributes.createdAt.split('T')[0]
       document.getElementById("d_update").innerHTML = user.attributes.updatedAt.split('T')[0]
       let id = document.getElementById("e_id").defaultValue = user.id
       const username = document.getElementById("e_username").defaultValue = user.attributes.username
-      const tier = document.getElementById("e_tier").defaultValue = user.attributes.tier
+      const tier = document.getElementById("e_tier").defaultValue = ctier
       const er = document.getElementById("e_er").defaultValue = user.attributes.er
       const category = document.getElementById("e_category").defaultValue = user.attributes.category
       const followers = document.getElementById("e_followers").defaultValue = user.attributes.followers
       const contact = document.getElementById("e_contact").defaultValue = user.attributes.cp
       const ratecard = document.getElementById("e_rateCard").defaultValue = user.attributes.rc
       const verified = document.getElementById("e_verified").defaultValue = user.attributes.verified
+      // console.log(verified)
       const profilePict = document.getElementById("e_profilePict").defaultValue = user.attributes.profilePict
-      console.log(id)
+
       preConfirm: () => {
         editData();
         viewDelete(id)
@@ -299,6 +347,7 @@ function onView(id) {
 
 // On Edit
 function editData() {
+  
   const id = document.getElementById("e_id").value
   const username = document.getElementById("e_username").value
   const tier = document.getElementById("e_tier").value
@@ -341,8 +390,9 @@ function manipulate() {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText).data
       document.getElementById("total-talent").innerHTML = objects.length
-
+      // console.log(objects[42].attributes.tier)
       let [Male, Female] = [0, 0]
+      let [Nano, Micro, Macro, Mid, Mega] = [0,0,0,0,0,]
       let
         [
           Automotive, Beauty, Culinary, Education, Enterpreneur, Event, Family, Fashion, Financial, Games, Health,
@@ -372,6 +422,48 @@ function manipulate() {
         else if (objects[i].attributes.category === "Technology") Technology++;
         else if (objects[i].attributes.category === "Travel") Travel++;
       }
+      // Doughnut Chart
+      for (let i = 0; i <objects.length; i++){
+        if(objects[i].attributes.tier === "Nano") Nano++
+        else if(objects[i].attributes.tier === "Micro") Micro++
+        else if(objects[i].attributes.tier === "Macro") Macro++
+        else if(objects[i].attributes.tier === "Mid-Tier") Mid++
+        else if(objects[i].attributes.tier === "Mega") Mega++
+      }
+      const doughChart =
+      [
+        {
+          "name": "Nano", "value": Nano
+        },
+        {
+          "name": "Micro", "value": Micro
+        },
+        {
+          "name": "Macro", "value": Macro
+        },
+        {
+          "name": "Mid-Tier", "value": Mid
+        },
+        {
+          "name": "Mega", "value": Mega
+        },
+      ]
+      const tierChart = new Chart(
+        document.getElementById("chartTier"),
+        configtier,
+      )
+      $(document).ready(function(){
+        const cName = doughChart.map(function(index){
+          return index.name
+        })
+        const cValue = doughChart.map(function(index){
+          return index.value
+        })
+        tierChart.config.data.labels = cName;
+        tierChart.config.datasets[0].data =cValue
+        tierChart.update()
+      })
+
       const chartJson =
         [
           { "name": "Automovite", "value": Automotive },
@@ -528,6 +620,7 @@ const tier = {
         'rgb(253, 108, 211)', //Sport
       ],
       hoverOffset: 4,
+      skipNull: true,
     },
   ]
 }
@@ -549,12 +642,13 @@ const configtier = {
   },
 }
 
-const tierChart = new Chart(
-  document.getElementById("chartTier"),
-  configtier,
-)
+// const tierChart = new Chart(
+//   document.getElementById("chartTier"),
+//   configtier,
+// )
 // End Chart Tier
 
+// Convert Followers > Tier
 function converTier(val) {
   let followers = val
   let tier;
@@ -571,6 +665,24 @@ function converTier(val) {
   }
   document.getElementById("tier").value = tier
 }
+// Convert Followers > Tier
+
+function converTierEdit(val) {
+  let followers = val
+  let tier;
+  if (followers > 1000000) {
+    tier = "Mega"
+  } else if (followers > 500000 && followers <= 1000000) {
+    tier = "Macro"
+  } else if (followers > 50000 && followers <= 500000) {
+    tier = "Mid-Tier"
+  } else if (followers > 10000 && followers <= 50000) {
+    tier = "Micro"
+  } else {
+    tier = "Nano"
+  }
+  document.getElementById("e_tier").value = tier
+}
 
 $(function () {
   $('input:radio[name="radios"]').change(function () {
@@ -586,6 +698,717 @@ $(function () {
 // Multiple Post
 function newF(){
 
+  let test =
+  [
+    {
+      "username": "jacquelinewijaya",
+      "followers": 46800,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Travel",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "cicifauziaa",
+      "followers": 15000,
+      "er": 0.01,
+      "cp": "-",
+      "rc": "test",
+      "category": "Travel",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "mariannerumantir",
+      "followers": 83000,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Travel",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "terestanley",
+      "followers": 11100,
+      "er": 0.02,
+      "cp": "-",
+      "rc": "test",
+      "category": "Games",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "kalebjonath",
+      "followers": 75700,
+      "er": 0.05,
+      "cp": "081230104883 (delas)",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "rifqiftr",
+      "followers": 63800,
+      "er": 0.05,
+      "cp": "087790006909 (aldo)",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "princehusein",
+      "followers": 65200,
+      "er": 0.02,
+      "cp": "08111961109",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "tvki.faithcns",
+      "followers": 25600,
+      "er": 0,
+      "cp": "081212890969 (arfan)",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "difkikhalif",
+      "followers": 19000,
+      "er": 0,
+      "cp": "082120333336 (raditya)",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "ninokayam",
+      "followers": 304000,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "dimaspradipta",
+      "followers": 15100,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "rayhannoor",
+      "followers": 19700,
+      "er": 0,
+      "cp": "melina@suneatercoven.com",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "thomasramdhan",
+      "followers": 140000,
+      "er": 0,
+      "cp": "@666njiqc (LINE)",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "juliaviocdr",
+      "followers": 296000,
+      "er": 0,
+      "cp": "08133411158 (Gesang)",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "dameznababan",
+      "followers": 78500,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "ilmanibrahim",
+      "followers": 57400,
+      "er": 0.01,
+      "cp": "081296838063",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "dirasugandi",
+      "followers": 89900,
+      "er": 0.01,
+      "cp": "-",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "bubublackship_",
+      "followers": 15500,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "starbeofficial",
+      "followers": 74700,
+      "er": 0.1,
+      "cp": "081284744833 (ina)",
+      "rc": "test",
+      "category": "Music",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "dimas.djay",
+      "followers": 76800,
+      "er": 0.04,
+      "cp": "-",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "montytiwa",
+      "followers": 73900,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "sahiraanjani",
+      "followers": 75600,
+      "er": 0,
+      "cp": "08129587778 (aldi)",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "timobros",
+      "followers": 42400,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "bene_dion",
+      "followers": 61500,
+      "er": 0,
+      "cp": "087781341841 (diva)",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "fajarbustomi",
+      "followers": 86100,
+      "er": 0,
+      "cp": "081388362536 (Mas Hato)",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "indrayr",
+      "followers": 55000,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "rizariri",
+      "followers": 83000,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "giulioparengkuan",
+      "followers": 95800,
+      "er": 0,
+      "cp": "0812-9069-146 (Niken)",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "roysungkono",
+      "followers": 47000,
+      "er": 0.02,
+      "cp": "0817441764",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "kamilandini",
+      "followers": 28700,
+      "er": 0.03,
+      "cp": "-",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "timobros",
+      "followers": 42900,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Movie",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "ankatama",
+      "followers": 98800,
+      "er": 0.04,
+      "cp": "0812-8210-286",
+      "rc": "test",
+      "category": "Family",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "rayrafi",
+      "followers": 72600,
+      "er": 0,
+      "cp": "rayhanrafi76@gmail.com",
+      "rc": "test",
+      "category": "Family",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "evelyngwyneth",
+      "followers": 13800,
+      "er": 0,
+      "cp": "dm",
+      "rc": "test",
+      "category": "Health",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "bertistmnt",
+      "followers": 76200,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Automotive",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "luthfiaziz11",
+      "followers": 48600,
+      "er": 0.02,
+      "cp": "-",
+      "rc": "test",
+      "category": "Automotive",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "johnnathansalim",
+      "followers": 93500,
+      "er": 0.03,
+      "cp": "0882 1976 0895 ( sasa )",
+      "rc": "test",
+      "category": "Automotive",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "panlalah",
+      "followers": 68200,
+      "er": 0.01,
+      "cp": "081333322046(Nadilla)",
+      "rc": "test",
+      "category": "Automotive",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "palaseno",
+      "followers": 50200,
+      "er": 0.04,
+      "cp": "-",
+      "rc": "test",
+      "category": "Automotive",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "hillsatrio",
+      "followers": 49300,
+      "er": 0.03,
+      "cp": "hillariussatrio@gmail.com",
+      "rc": "test",
+      "category": "Automotive",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "febians25",
+      "followers": 37200,
+      "er": 0.02,
+      "cp": "-",
+      "rc": "test",
+      "category": "Financial Planning",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "jeevan_akawa",
+      "followers": 20000,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Kids",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "zara.cute",
+      "followers": 87700,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Kids",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "kellycourtneyy",
+      "followers": 54200,
+      "er": 0.39,
+      "cp": "pasangan.couple02@gmail.com",
+      "rc": "test",
+      "category": "Relationship",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "khalishacr",
+      "followers": 44900,
+      "er": 0.1,
+      "cp": "087864776040",
+      "rc": "test",
+      "category": "Culture",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "anjas_maradita",
+      "followers": 86300,
+      "er": 0.04,
+      "cp": "-",
+      "rc": "test",
+      "category": "Technology",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "aufazaaa",
+      "followers": 22300,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Entrepreneur",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "iyaslawrence",
+      "followers": 62600,
+      "er": 0,
+      "cp": "087723246464 (indira diandra)",
+      "rc": "test",
+      "category": "Entrepreneur",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "kikiauliaucup",
+      "followers": 35000,
+      "er": 0.08,
+      "cp": "-",
+      "rc": "test",
+      "category": "Entrepreneur",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "sijandd",
+      "followers": 10200,
+      "er": 0.04,
+      "cp": "-",
+      "rc": "test",
+      "category": "Entrepreneur",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "windy.gani",
+      "followers": 45500,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Culinary",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "nadi_ngopi",
+      "followers": 29700,
+      "er": 0.03,
+      "cp": "-",
+      "rc": "test",
+      "category": "Culinary",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "dellaayu90",
+      "followers": 31900,
+      "er": 0.14,
+      "cp": "dellaayu291@gmail.com",
+      "rc": "test",
+      "category": "Culinary",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "palitho.mci9",
+      "followers": 40900,
+      "er": 0,
+      "cp": "087786335199 (Farhan)",
+      "rc": "test",
+      "category": "Culinary",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "mamankkuliner",
+      "followers": 25800,
+      "er": 0.03,
+      "cp": "MamankKuliner.Business@gmail.com",
+      "rc": "test",
+      "category": "Culinary",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "tegarinfantries",
+      "followers": 32800,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Sport",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "hermandzumafo99",
+      "followers": 47000,
+      "er": 0,
+      "cp": "-",
+      "rc": "test",
+      "category": "Sport",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "yesayaasaudale",
+      "followers": 56400,
+      "er": 0,
+      "cp": "082260505566 (Rania)",
+      "rc": "test",
+      "category": "Sport",
+      "tier": "",
+      "gender": "Female",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+    {
+      "username": "adaraskyla",
+      "followers": 23200,
+      "er": 0.04,
+      "cp": "087782956696 (kaya mgmt)",
+      "rc": "test",
+      "category": "Sport",
+      "tier": "",
+      "gender": "Male",
+      "verified": 0,
+      "profilePict": "https://via.placeholder.com/100x100"
+    },
+  ]
 // for (let i = 0; i < test.length; i++) {
 //   const xhttp = new XMLHttpRequest();
 // xhttp.open("POST", "http://localhost:1337/api/kols/");
@@ -598,8 +1421,8 @@ function newF(){
 // ));
 // console.log("success")
 // }
-console.log(test.length)
+// console.log(test.length)
 }
 
 
-// newF()
+newF()

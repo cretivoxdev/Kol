@@ -285,6 +285,70 @@ small{
 #culture{
   background: rgb(188, 108, 253);
 }
+.lifestyle{
+  background: rgb(186, 144, 218);
+}
+.fashion{
+  background: rgb(4, 191, 243);
+}
+.beauty{
+  background: rgb(211, 15, 212);
+}
+.education{
+  background: rgb(206, 243, 19);
+}
+.travel{
+  background: rgb(245, 126, 18);
+}
+.games{
+  background: rgb(37, 101, 44);
+}
+.event{
+  background: rgb(133, 87, 116);
+}
+.music{
+  background: rgb(90, 231, 160);
+}
+.movie{
+  background: rgb(27, 137, 167);
+}
+.family{
+  background: rgb(248, 154, 106);
+}
+.health{
+  background: rgb(45, 125, 115);
+}
+.automotive{
+  background: rgb(170, 22, 228);
+}
+.finance{
+  background: rgb(32, 212, 47);
+}
+.kids{
+  background: rgb(130, 154, 208);
+}
+.relationship{
+  background: rgb(53, 184, 199);
+}
+.culture{
+  background: rgb(41, 145, 75);
+}
+.technology{
+  background: rgb(88, 201, 6);
+}
+.enterpreneur{
+  background: rgb(198, 165, 213);
+}
+.culinary{
+  background: rgb(241, 137, 58);
+}
+.sport{
+  background: rgb(253, 108, 211);
+}
+
+.culture{
+  background: rgb(188, 108, 253);
+}
 .switch-field {
 	display: flex;
 	margin-bottom: 36px;
